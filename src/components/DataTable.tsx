@@ -30,7 +30,6 @@ interface DataTableProps {
   customParameters?: Record<string, any>;
   onBulkAction?: (action: string, selectedData: Record<string, any>[]) => void;
   onAction?: (action: string) => void;
-  children?: React.ReactNode;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -43,8 +42,7 @@ const DataTable: React.FC<DataTableProps> = ({
   selectionConfig,
   customParameters,
   onBulkAction,
-  onAction,
-  children
+  onAction
 }) => {
   const { t } = useI18n();
 
@@ -270,11 +268,11 @@ const DataTable: React.FC<DataTableProps> = ({
             <tr>
               {enableSelection && (
                 <th className="w-12">
-                  <CheckBox
-                    checked={selectAll.get}
-                    indeterminate={indeterminate}
-                    onChange={(checked) => selectAll.set(checked)}
-                  />
+                    <CheckBox
+                      checked={selectAll.get()}
+                      indeterminate={indeterminate}
+                      onChange={(checked) => selectAll.set(checked)}
+                    />
                 </th>
               )}
 
@@ -328,15 +326,7 @@ const DataTable: React.FC<DataTableProps> = ({
 
                   {columns.map((col, j) => (
                     <td key={j}>
-                      {children && React.isValidElement(children) && children.props[`cell-${col.key}`] ? (
-                        React.cloneElement(children, {
-                          row,
-                          column: col,
-                          value: row[col.key]
-                        })
-                      ) : (
-                        <span>{row[col.key] == null ? '' : String(row[col.key])}</span>
-                      )}
+                      <span>{row[col.key] == null ? '' : String(row[col.key])}</span>
                     </td>
                   ))}
                 </tr>

@@ -18,9 +18,10 @@ import {
 
 interface IconRendererProps {
   icon: string | React.ComponentType<any>;
+  className?: string;
 }
 
-const IconRenderer: React.FC<IconRendererProps> = ({ icon }) => {
+const IconRenderer: React.FC<IconRendererProps> = ({ icon, className }) => {
   const iconMap = {
     'add': AddIcon,
     'chevron-down': ChevronDownIcon,
@@ -40,11 +41,11 @@ const IconRenderer: React.FC<IconRendererProps> = ({ icon }) => {
 
   if (typeof icon === 'string') {
     const IconComponent = iconMap[icon as keyof typeof iconMap];
-    return IconComponent ? <IconComponent /> : null;
+    return IconComponent ? <IconComponent className={className} /> : null;
   }
   
   const IconComponent = icon;
-  return <IconComponent />;
+  return <IconComponent className={className} />;
 };
 
 export default IconRenderer;
