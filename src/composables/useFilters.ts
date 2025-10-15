@@ -2,22 +2,16 @@ import { useState, useMemo, useCallback } from 'react';
 import type { ColumnState } from '../types';
 
 export const useFilters = (data: any[], columns: ColumnState[]) => {
-  const [filters, setFilters] = useState<Record<string, string[]>>({});
-  
-  const distinctValuesCache = new Map<string, any[]>();
-  const [lastDataHash, setLastDataHash] = useState<string>('');
-
-  // Initialize filters for filterable columns
-  useState(() => {
+  const [filters, setFilters] = useState<Record<string, string[]>>(() => {
     const initialFilters: Record<string, string[]> = {};
     columns.forEach(col => {
       if (col.filterable !== false) {
         initialFilters[col.key] = [];
       }
     });
-    setFilters(initialFilters);
+    return initialFilters;
   });
-
+  
   const resetFilters = useCallback(() => {
     const newFilters: Record<string, string[]> = {};
     columns.forEach(col => {
@@ -28,33 +22,18 @@ export const useFilters = (data: any[], columns: ColumnState[]) => {
     setFilters(newFilters);
   }, [columns]);
 
-  const getDistinctValues = useCallback((): Record<string, any[]> => {
-    const currentHash = JSON.stringify(data.map(row => 
-      columns.map(col => row[col.key])
-    ));
-    
-    if (currentHash === lastDataHash && distinctValuesCache.size > 0) {
-      const cachedValues: Record<string, any[]> = {};
-      columns.forEach(col => {
-        if (col.filterable !== false) {
-          cachedValues[col.key] = distinctValuesCache.get(col.key) || [];
-        }
-      });
-      return cachedValues;
-    }
-    
+  const distinctValues = useMemo(() => {
     const values: Record<string, any[]> = {};
     columns.forEach(col => {
       if (col.filterable !== false) {
         const uniqueValues = Array.from(new Set(data.map(row => row[col.key])));
         values[col.key] = uniqueValues;
-        distinctValuesCache.set(col.key, uniqueValues);
       }
     });
-    
-    setLastDataHash(currentHash);
     return values;
-  }, [data, columns, lastDataHash]);
+  }, [data, columns]);
+
+  const getDistinctValues = useCallback(() => distinctValues, [distinctValues]);
 
   const filteredData = useMemo(() => {
     const hasActiveFilters = Object.values(filters).some(filter => filter.length > 0);

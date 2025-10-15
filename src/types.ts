@@ -66,3 +66,7 @@ export interface ApiResponse {
   totalPages: number;
   distinctValues: Record<string, any[]>;
 }
+
+export interface DataTableRef {
+  reloadData: () => void;
+}

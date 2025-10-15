@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import type { ColumnState, PaginationConfig, FinalPaginationConfig, ActionsConfig, SelectionConfig, SortState } from '../types';
+import React, { useState, useEffect, useMemo, forwardRef, useImperativeHandle } from 'react';
+import type { ColumnState, PaginationConfig, FinalPaginationConfig, ActionsConfig, SelectionConfig, SortState, DataTableRef } from '../types';
 
 import Actions from './Actions';
 import CheckBox from './CheckBox';
@@ -28,11 +28,12 @@ interface DataTableProps {
   actionsConfig?: ActionsConfig;
   selectionConfig?: SelectionConfig;
   customParameters?: Record<string, any>;
+  cellRenderer?: (value: any, row: Record<string, any>, column: ColumnState) => React.ReactNode;
   onBulkAction?: (action: string, selectedData: Record<string, any>[]) => void;
   onAction?: (action: string) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = ({
+const DataTable = forwardRef<DataTableRef, DataTableProps>(({
   columns,
   data,
   paginationConfig = {},
@@ -41,9 +42,10 @@ const DataTable: React.FC<DataTableProps> = ({
   actionsConfig,
   selectionConfig,
   customParameters,
+  cellRenderer,
   onBulkAction,
   onAction
-}) => {
+}, ref) => {
   const { t } = useI18n();
 
   const sectionClasses = 'flex flex-col sm:flex-row justify-between items-center gap-4';
@@ -76,7 +78,7 @@ const DataTable: React.FC<DataTableProps> = ({
   }, [data, isApiMode]);
 
   // Data processing pipeline for static mode
-  const searchableColumns = columns.filter(col => col.searchable !== false).map(c => c.key);
+  const searchableColumns = useMemo(() => columns.filter(col => col.searchable !== false).map(c => c.key), [columns]);
   const { searchFilteredData } = useSearch(search, staticData, searchableColumns);
   const { filters, filteredData, resetFilters: staticResetFilters, getDistinctValues } = useFilters(searchFilteredData, columns);
   const { sort: staticSort, sortBy, sortedData } = useSort(filteredData, columns);
@@ -201,8 +203,12 @@ const DataTable: React.FC<DataTableProps> = ({
     }
   };
 
-  const hasFilterableColumns = columns.some(col => col.filterable !== false);
-  const hasSearchableColumns = columns.some(col => col.searchable !== false);
+  useImperativeHandle(ref, () => ({
+    reloadData
+  }));
+
+  const hasFilterableColumns = useMemo(() => columns.some(col => col.filterable !== false), [columns]);
+  const hasSearchableColumns = useMemo(() => columns.some(col => col.searchable !== false), [columns]);
 
   return (
     <div className="relative">
@@ -324,11 +330,18 @@ const DataTable: React.FC<DataTableProps> = ({
                     </td>
                   )}
 
-                  {columns.map((col, j) => (
-                    <td key={j}>
-                      <span>{row[col.key] == null ? '' : String(row[col.key])}</span>
-                    </td>
-                  ))}
+                  {columns.map((col, j) => {
+                    const value = row[col.key];
+                    const content = cellRenderer 
+                      ? cellRenderer(value, row, col)
+                      : (value == null ? '' : String(value));
+                    
+                    return (
+                      <td key={j}>
+                        {typeof content === 'string' ? <span>{content}</span> : content}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             )}
@@ -352,6 +365,6 @@ const DataTable: React.FC<DataTableProps> = ({
       {isApiMode && apiLoading && <LoadingOverlay />}
     </div>
   );
-};
+});
 
 export default DataTable;
