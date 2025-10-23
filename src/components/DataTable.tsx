@@ -80,7 +80,7 @@ const DataTable = forwardRef<DataTableRef, DataTableProps>(({
   // Data processing pipeline for static mode
   const searchableColumns = useMemo(() => columns.filter(col => col.searchable !== false).map(c => c.key), [columns]);
   const { searchFilteredData } = useSearch(search, staticData, searchableColumns);
-  const { filters, filteredData, resetFilters: staticResetFilters, getDistinctValues } = useFilters(searchFilteredData, columns);
+  const { filters, filteredData, resetFilters: staticResetFilters, getDistinctValues, updateFilters: staticUpdateFilters } = useFilters(searchFilteredData, columns);
   const { sort: staticSort, sortBy, sortedData } = useSort(filteredData, columns);
 
   // API data handling
@@ -158,7 +158,7 @@ const DataTable = forwardRef<DataTableRef, DataTableProps>(({
 
   const updateFilters = (newFilters: Record<string, string[]>) => {
     if (isApiMode) setApiFilters({ ...newFilters });
-    else Object.assign(filters, newFilters);
+    else staticUpdateFilters(newFilters);
   };
 
   const resetFilters = () => {

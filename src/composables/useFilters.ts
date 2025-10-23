@@ -51,7 +51,8 @@ export const useFilters = (data: any[], columns: ColumnState[]) => {
         if (selected.length === 0) continue;
         
         const val = String(row[col] ?? '');
-        if (!selected.includes(val)) return false;
+        const selectedStrings = selected.map(s => String(s));
+        if (!selectedStrings.includes(val)) return false;
       }
       return true;
     });
@@ -59,10 +60,15 @@ export const useFilters = (data: any[], columns: ColumnState[]) => {
     return result;
   }, [data, filters, columns]);
 
+  const updateFilters = useCallback((newFilters: Record<string, string[]>) => {
+    setFilters(newFilters);
+  }, []);
+
   return {
     filters,
     filteredData,
     resetFilters,
     getDistinctValues,
+    updateFilters,
   };
 }
