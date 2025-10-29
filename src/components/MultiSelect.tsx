@@ -227,6 +227,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                     removeItem(item);
                   }}
                   title={t('multiselect.remove')}
+                  aria-label={t('multiselect.remove')}
                 >
                   <CloseIcon className="w-3 h-3" />
                 </button>
@@ -260,6 +261,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             e.stopPropagation();
             toggleDropdown();
           }}
+          aria-label={t('multiselect.toggleDropdown')}
         >
           <ChevronDownIcon className="w-3 h-3" />
         </button>
@@ -315,6 +317,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                 type="button"
                 className="btn btn-ghost btn-xs"
                 onClick={clearSelection}
+                aria-label={t('multiselect.clearAll')}
               >
                 {t('multiselect.clearAll')}
               </button>

@@ -18,18 +18,20 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   };
 
   return (
-    <input
-      type="checkbox"
-      className={`checkbox checkbox-sm focus:outline-none focus:ring-0 custom-checkbox ${
-        checked || indeterminate ? '!bg-base-300 !border-base-300' : ''
-      }`}
-      checked={checked}
-      ref={(el) => {
-        if (el) el.indeterminate = indeterminate;
-      }}
-      onChange={handleChange}
-      onClick={onClick}
-    />
+    <label>
+      <input
+        type="checkbox"
+        className={`checkbox checkbox-sm focus:outline-none focus:ring-0 custom-checkbox ${
+          checked || indeterminate ? '!bg-base-300 !border-base-300' : ''
+        }`}
+        checked={checked}
+        ref={(el) => {
+          if (el) el.indeterminate = indeterminate;
+        }}
+        onChange={handleChange}
+        onClick={onClick}
+      />
+    </label>
   );
 };
 

@@ -35,6 +35,7 @@ const Actions: React.FC<ActionsProps> = ({ actions, onAction }) => {
             className={`btn btn-sm ${getButtonClass(action.variant)}`}
             disabled={action.disabled}
             onClick={() => onAction(action.action)}
+            aria-label={action.action}
           >
             {action.icon && (
               <IconRenderer

@@ -52,6 +52,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 disabled={page === 1}
                 onClick={() => onGoto(1)}
                 title={t('pagination.first')}
+                aria-label={t('pagination.first')}
               >
                 ««
               </button>
@@ -62,6 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({
               disabled={page === 1}
               onClick={() => onGoto(page - 1)}
               title={t('pagination.previous')}
+              aria-label={t('pagination.previous')}
             >
               «
             </button>
@@ -78,6 +80,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 className={`join-item btn btn-sm ${page === p ? 'btn-active' : ''}`}
                 onClick={() => onGoto(p)}
                 title={`${t('pagination.goTo')} ${p}`}
+                aria-label={`${t('pagination.goTo')} ${p}`}
               >
                 {p}
               </button>
@@ -94,6 +97,7 @@ const Pagination: React.FC<PaginationProps> = ({
               disabled={page === totalPages}
               onClick={() => onGoto(page + 1)}
               title={t('pagination.next')}
+              aria-label={t('pagination.next')}
             >
               »
             </button>
@@ -104,6 +108,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 disabled={page === totalPages}
                 onClick={() => onGoto(totalPages)}
                 title={t('pagination.last')}
+                aria-label={t('pagination.last')}
               >
                 »»
               </button>

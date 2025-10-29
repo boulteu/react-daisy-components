@@ -48,7 +48,7 @@ const Filters: React.FC<FiltersProps> = ({
   return (
     <>
       <div className="tooltip tooltip-bottom" data-tip={t('filters.filterData')}>
-        <button className="btn btn-sm" onClick={() => setShowFilter(true)}>
+        <button className="btn btn-sm" onClick={() => setShowFilter(true)} aria-label={t('filters.filterData')}>
           <FilterIcon className="w-3 h-3" />
           {activeFiltersCount > 0 && (
             <span className="badge badge-sm ml-1 text-base-300 bg-base-content border border-base-300">
@@ -66,6 +66,7 @@ const Filters: React.FC<FiltersProps> = ({
               className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2"
               onClick={() => setShowFilter(false)}
               title={t('filters.close')}
+              aria-label={t('filters.close')}
             >
               <CloseIcon className="w-4 h-4" />
             </button>
@@ -90,7 +91,7 @@ const Filters: React.FC<FiltersProps> = ({
             </div>
 
             <div className="modal-action mt-6">
-              <button type="button" className="btn btn-sm" onClick={resetFilters}>
+              <button type="button" className="btn btn-sm" onClick={resetFilters} aria-label={t('filters.resetAll')}>
                 {t('filters.resetAll')}
               </button>
             </div>

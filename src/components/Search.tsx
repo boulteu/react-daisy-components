@@ -12,7 +12,7 @@ const Search: React.FC<SearchProps> = ({ value, onUpdate }) => {
   };
 
   return (
-    <div className="input input-sm w-48 focus-within:outline-none focus-within:ring-0">
+    <label className="input input-sm w-48 focus-within:outline-none focus-within:ring-0">
       <SearchIcon className="w-6 h-6 text-base-content/60" />
       <input
         type="search"
@@ -20,7 +20,7 @@ const Search: React.FC<SearchProps> = ({ value, onUpdate }) => {
         onChange={handleInputChange}
         className="px-0 w-full focus:outline-none focus:ring-0"
       />
-    </div>
+    </label>
   );
 };
 
