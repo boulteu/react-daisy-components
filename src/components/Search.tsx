@@ -1,5 +1,6 @@
 import React from 'react';
 import { SearchIcon } from '../icons';
+import { useI18n } from '../composables/useI18n';
 
 interface SearchProps {
   value: string;
@@ -7,6 +8,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ value, onUpdate }) => {
+  const { t } = useI18n();
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onUpdate(event.target.value);
   };
@@ -19,6 +21,7 @@ const Search: React.FC<SearchProps> = ({ value, onUpdate }) => {
         value={value}
         onChange={handleInputChange}
         className="px-0 w-full focus:outline-none focus:ring-0"
+        aria-label={t('multiselect.search')}
       />
     </label>
   );

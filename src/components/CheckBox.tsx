@@ -1,4 +1,5 @@
 import React from 'react';
+import { useI18n } from '../composables/useI18n';
 
 interface CheckBoxProps {
   checked?: boolean;
@@ -13,6 +14,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   onChange,
   onClick
 }) => {
+  const { t } = useI18n();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.checked);
   };
@@ -30,6 +32,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
         }}
         onChange={handleChange}
         onClick={onClick}
+        aria-label={t('filters.select')}
       />
     </label>
   );
